@@ -1,0 +1,29 @@
+import pandas as pd
+from get_data import get_is_data,get_cf_data
+from IS_norm import normalize_is
+from to_excel import to_excel_df
+from CF_norm import normalize_cf
+
+to_excel = True
+time_series = True
+Transpose = False
+
+tickers = ['CBOE','BX','BLK','ABT','ABBV','CPAY','AIG','BAC']
+is_columns = ['symbol','date','revenue','eps','ebitda','netIncome']
+cf_columns = ['symbol', 'date', 'netIncome','netCashUsedForInvestingActivites','operatingCashFlow']
+
+df_is = normalize_is(tickers,is_columns)
+
+print(df_is)
+
+
+
+
+
+
+
+
+if to_excel == True:
+    to_excel_df(df_is)
+else:
+    print(df_is.head())
