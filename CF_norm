@@ -1,0 +1,24 @@
+from get_data import get_cf_data
+import pandas as pd
+
+def normalize_cf(tickers,cf_columns):
+    df_cf = get_cf_data(tickers)
+
+    df_cf['date'] = pd.to_datetime(df_cf['date'])
+    # df_cf = df_cf[df_cf['date'] > '2023-01-01']
+
+    df_cf = df_cf[cf_columns]
+    df_cf.rename(columns={'netCashUsedForInvestingActivites': 'CFI', 'operatingCashFlow': 'CFO', 'netIncome': 'NI'},
+                 inplace=True)
+    df_cf['CFI'] = df_cf['CFI'].astype(float)
+    df_cf['CFO'] = df_cf['CFO'].astype(float)
+    df_cf['NI'] = df_cf['NI'].astype(float)
+
+    df_cf['Accrued'] = df_cf['NI'] - df_cf['CFO'] - df_cf['CFI']
+
+    df_cf['CFI'] = df_cf['CFI'].apply(lambda x: f"{x:,.0f}")
+    df_cf['CFO'] = df_cf['CFO'].apply(lambda x: f"{x:,.0f}")
+    df_cf['NI'] = df_cf['NI'].apply(lambda x: f"{x:,.0f}")
+    df_cf['Accrued'] = df_cf['Accrued'].apply(lambda x: f"{x:,.0f}")
+
+    return df_cf
