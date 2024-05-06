@@ -1,0 +1,18 @@
+from get_data import get_is_data
+import pandas as pd
+
+def normalize_is(tickers,is_columns):
+
+    df_is = get_is_data(tickers)
+
+    df_is = df_is[is_columns]
+    df_is.sort_values('date', inplace=True, ascending=True)
+    df_is['percent_change'] = df_is.groupby('symbol')['revenue'].pct_change() * 100
+    df_is['revenue'] = df_is['revenue'].apply(lambda x: f"{x:,}")
+    df_is['ebitda'] = df_is['ebitda'].apply(lambda x: f"{x:,}")
+    df_is['netIncome'] = df_is['netIncome'].apply(lambda x: f"{x:,}")
+
+    df_is = df_is.set_index(['symbol','date'])
+    df_is.sort_values(['symbol','date'], inplace=True)
+
+    return df_is
