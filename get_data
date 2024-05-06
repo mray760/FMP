@@ -1,0 +1,30 @@
+import pandas as pd
+import requests
+
+def get_is_data(tickers):
+    api_key = 'lz7t0TsVNyB7DIRkdzfKR4OL4UBRKLoK'
+    df_new = pd.DataFrame()
+    for ticker in tickers:
+        endpoint = f'https://financialmodelingprep.com/api/v3/income-statement/{ticker}?period=annual&apikey={api_key}'
+        response = requests.get(endpoint)
+        data = response.json()
+
+        df_ticker = pd.DataFrame(data)
+
+        df_new = pd.concat([df_new,df_ticker],ignore_index=True)
+
+    return df_new
+
+
+def get_cf_data(tickers):
+    api_key = 'lz7t0TsVNyB7DIRkdzfKR4OL4UBRKLoK'
+    df_new = pd.DataFrame()
+    for ticker in tickers:
+        endpoint = f'https://financialmodelingprep.com/api/v3/cash-flow-statement/{ticker}?period=annual&apikey={api_key}'
+        response = requests.get(endpoint)
+        data = response.json()
+
+        df_ticker = pd.DataFrame(data)
+        df_new = pd.concat([df_new, df_ticker], ignore_index=True)
+
+    return df_new
